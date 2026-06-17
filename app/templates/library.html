@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% from "macros.html" import flash_messages %}
+{% from "partials.html" import library_header, book_card %}
+
+{% block title %}My Library — Book Library{% endblock %}
+
+{% block content %}
+<div class="library-layout">
+  {{ library_header(user, active_tab) }}
+
+  <main class="library-main">
+    {{ flash_messages() }}
+
+    <div class="library-toolbar">
+      <div>
+        <h2 class="library-page-title">Your Collection</h2>
+        <p class="library-page-subtitle">
+          {% if query %}
+            {{ books|length }} result{% if books|length != 1 %}s{% endif %} for "{{ query }}"
+          {% else %}
+            {{ books|length }} book{% if books|length != 1 %}s{% endif %} in your library
+          {% endif %}
+        </p>
+      </div>
+      <div class="library-toolbar-actions">
+        <a href="/library/add" class="btn btn-primary library-add-btn">+ Add Book</a>
+        <details class="library-search-panel" {% if query %}open{% endif %}>
+          <summary class="library-search-icon-btn" aria-label="Search your books" title="Search your books">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <span>Search books</span>
+          </summary>
+          <form action="/library" method="get" class="library-search-form">
+            <input type="text" name="q" placeholder="Title, author, or ISBN..."
+                   value="{{ query }}" class="library-search-input" required minlength="1">
+            <button class="btn btn-primary btn-sm" type="submit">Search</button>
+            {% if query %}
+              <a href="/library" class="btn btn-secondary btn-sm">Clear</a>
+            {% endif %}
+          </form>
+        </details>
+      </div>
+    </div>
+
+    {% if query %}
+      <div class="library-search-active">
+        Showing results for <strong>"{{ query }}"</strong>
+      </div>
+    {% endif %}
+
+    <div class="book-grid">
+      {% if books %}
+        {% for book in books %}
+          {{ book_card(book) }}
+        {% endfor %}
+      {% elif query %}
+        <div class="library-empty">
+          <div class="library-empty-icon">🔍</div>
+          <h3>No books found</h3>
+          <p>Nothing in your library matches "{{ query }}". Try a different search.</p>
+          <a href="/library" class="btn btn-secondary">Clear search</a>
+        </div>
+      {% else %}
+        <div class="library-empty">
+          <div class="library-empty-icon">📚</div>
+          <h3>Your shelf is empty</h3>
+          <p>Add a book manually or search Google Books to start your collection.</p>
+          <div class="library-empty-actions">
+            <a href="/library/add" class="btn btn-primary">Add Book</a>
+            <a href="/library/search" class="btn btn-secondary">Search Google Books</a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </main>
+</div>
+{% endblock %}

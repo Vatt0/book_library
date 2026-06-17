@@ -1,0 +1,45 @@
+================================================================================
+BOOK LIBRARY - ROUTE DOCUMENTATION
+================================================================================
+
+Base URL (local):  http://127.0.0.1:8000
+
+Authentication uses an HTTP-only cookie (access_token) set on login/register.
+
+
+================================================================================
+PUBLIC ROUTES
+================================================================================
+
+GET  /                         Landing page
+GET  /login                    Login form
+POST /login                    Submit login
+GET  /register                 Register form
+POST /register                 Submit registration
+POST /logout                   Log out
+
+
+================================================================================
+LIBRARY ROUTES  (login required)
+================================================================================
+
+GET  /library                  My books (?q= optional search)
+GET  /library/search           Google Books search (?q=)
+GET  /library/add               Add book form
+POST /library/add               Create book
+GET  /library/{book_id}         Book details
+GET  /library/{book_id}/edit    Edit form
+POST /library/{book_id}/edit    Update book
+GET  /library/{book_id}/delete  Delete confirm
+POST /library/{book_id}/delete  Delete book
+POST /library/google/add        Add from Google Books
+
+
+================================================================================
+ENVIRONMENT VARIABLES  (.env)
+================================================================================
+
+SECRET_KEY, DATABASE_URL, ACCESS_TOKEN_EXPIRE_MINUTES,
+GOOGLE_BOOKS_API_URL, GOOGLE_BOOKS_API_KEY
+
+================================================================================

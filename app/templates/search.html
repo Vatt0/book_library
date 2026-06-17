@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% from "macros.html" import flash_messages %}
+{% from "partials.html" import library_header, book_card %}
+
+{% block title %}Search Google Books — Book Library{% endblock %}
+
+{% block content %}
+<div class="library-layout">
+  {{ library_header(user, active_tab) }}
+
+  <main class="library-main">
+    {{ flash_messages() }}
+
+    <div class="library-toolbar">
+      <h2 class="library-page-title">Discover Books</h2>
+      <p class="library-page-subtitle">Search Google Books and add titles to your library</p>
+    </div>
+
+    <form action="/library/search" method="get" class="library-search">
+      <input type="text" name="q" placeholder="Search by title, author, or ISBN..."
+             value="{{ query }}" class="library-search-input">
+      <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+
+    <div class="book-grid">
+      {% if query and not results %}
+        <div class="library-empty">
+          <div class="library-empty-icon">🔍</div>
+          <h3>No results found</h3>
+          <p>Nothing matched "{{ query }}". Try a different search term.</p>
+        </div>
+      {% elif results %}
+        {% for book in results %}
+          {{ book_card(book, show_add=true) }}
+        {% endfor %}
+      {% else %}
+        <div class="library-empty">
+          <div class="library-empty-icon">🔍</div>
+          <h3>Search millions of books</h3>
+          <p>Enter a title, author, or ISBN above to find books on Google Books.</p>
+        </div>
+      {% endif %}
+    </div>
+  </main>
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% from "partials.html" import library_header %}
+
+{% block title %}{{ book.title }} — Book Library{% endblock %}
+
+{% block content %}
+<div class="library-layout library-layout--detail">
+  {{ library_header(user, active_tab) }}
+
+  <main class="library-main">
+    <div class="book-detail-back">
+      <a href="/library" class="btn btn-secondary btn-sm">← Back to library</a>
+    </div>
+
+    <div class="book-detail-panel">
+      <div class="book-detail-cover">
+        {% if book.cover_url %}
+          <img src="{{ book.cover_url }}" alt="{{ book.title }}">
+        {% else %}
+          <div class="book-detail-cover-fallback">📖</div>
+        {% endif %}
+      </div>
+
+      <div class="book-detail-content">
+        <h1 class="book-detail-title">{{ book.title }}</h1>
+        <p class="book-detail-author">{{ book.author or "Unknown author" }}</p>
+
+        <dl class="book-detail-meta">
+          {% if book.published_date %}
+            <div class="book-detail-row">
+              <dt>Published</dt>
+              <dd>{{ book.published_date }}</dd>
+            </div>
+          {% endif %}
+          {% if book.isbn %}
+            <div class="book-detail-row">
+              <dt>ISBN</dt>
+              <dd>{{ book.isbn }}</dd>
+            </div>
+          {% endif %}
+          {% if book.google_books_id %}
+            <div class="book-detail-row">
+              <dt>Google Books ID</dt>
+              <dd>{{ book.google_books_id }}</dd>
+            </div>
+          {% endif %}
+          <div class="book-detail-row">
+            <dt>Added to library</dt>
+            <dd>{{ book.created_at.strftime('%b %d, %Y') }}</dd>
+          </div>
+          <div class="book-detail-row">
+            <dt>Last updated</dt>
+            <dd>{{ book.updated_at.strftime('%b %d, %Y') }}</dd>
+          </div>
+        </dl>
+
+        {% if book.description %}
+          <div class="book-detail-description">
+            <h2>Description</h2>
+            <p>{{ book.description }}</p>
+          </div>
+        {% else %}
+          <div class="book-detail-description book-detail-description--empty">
+            <p>No description available for this book.</p>
+          </div>
+        {% endif %}
+
+        <div class="book-detail-actions">
+          <a href="/library/{{ book.id }}/edit" class="btn btn-primary">Edit Book</a>
+          <a href="/library/{{ book.id }}/delete" class="btn btn-danger">Delete</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock %}

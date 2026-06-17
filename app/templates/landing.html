@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Book Library — Your personal reading collection{% endblock %}
+
+{% block content %}
+<div class="landing-page">
+  <nav class="landing-navbar">
+    <a href="/" class="landing-logo">📚 <span>Book</span> Library</a>
+    <div class="landing-nav-actions">
+      <a href="/login" class="btn btn-secondary btn-sm">Log In</a>
+      <a href="/register" class="btn btn-primary btn-sm">Create Account</a>
+    </div>
+  </nav>
+
+  <section class="landing-hero-image">
+    <img src="/static/images/library-hero.png" alt="Bookshelves filled with books">
+    <div class="landing-hero-overlay">
+      <p class="landing-eyebrow">Welcome to your library</p>
+      <h1>Organize, discover, and enjoy your <span>books</span></h1>
+    </div>
+  </section>
+
+  <section class="landing-about" id="about">
+    <div class="landing-about-inner">
+      <h2>About My Library</h2>
+      <p class="landing-about-lead">
+        My Library is your personal space to collect, organize, and manage every book you own or want to read.
+        Whether you add titles by hand or pull them from Google Books, everything stays in one private collection.
+      </p>
+
+      <div class="landing-features">
+        <div class="landing-feature">
+          <span class="landing-feature-icon">📖</span>
+          <h3>My Library</h3>
+          <p>Add books manually, edit details, and keep your collection up to date with full create, read, update, and delete support.</p>
+        </div>
+        <div class="landing-feature">
+          <span class="landing-feature-icon">🔍</span>
+          <h3>Google Books</h3>
+          <p>Search millions of titles and add them to your library in one click — cover, author, ISBN, and description included.</p>
+        </div>
+        <div class="landing-feature">
+          <span class="landing-feature-icon">🔒</span>
+          <h3>Private & Secure</h3>
+          <p>Your library belongs to you alone. Sign in to access your books — no one else can see or edit your collection.</p>
+        </div>
+      </div>
+
+      <div class="landing-cta">
+        <h3>Ready to start?</h3>
+        <p>Create a free account and build your library today.</p>
+        <div class="landing-cta-actions">
+          <a href="/register" class="btn btn-primary btn-lg">Create Account</a>
+          <a href="/login" class="btn btn-secondary btn-lg">Log In</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

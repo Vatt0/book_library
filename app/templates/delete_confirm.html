@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "partials.html" import library_header %}
+
+{% block title %}Delete Book — Book Library{% endblock %}
+
+{% block content %}
+<div class="library-layout">
+  {{ library_header(user, "library") }}
+
+  <main class="library-main library-main--narrow">
+    <div class="card form-card">
+      <h2>Delete Book</h2>
+      <p class="form-card-lead">Are you sure you want to remove <strong>{{ book.title }}</strong> from your library? This cannot be undone.</p>
+      <form action="/library/{{ book.id }}/delete" method="post" class="form-actions">
+        <a href="/library" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-danger">Delete Book</button>
+      </form>
+    </div>
+  </main>
+</div>
+{% endblock %}
