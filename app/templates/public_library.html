@@ -1,6 +1,5 @@
 {% extends "base.html" %}
-{% from "macros.html" import flash_messages %}
-{% from "partials.html" import library_header, public_book_card %}
+{% from "partials.html" import library_header, public_book_card, flash_messages %}
 
 {% block title %}{{ owner.username }}'s Library — Book Library{% endblock %}
 
@@ -9,7 +8,7 @@
   {{ library_header(user, active_tab) }}
 
   <main class="library-main">
-    {{ flash_messages() }}
+    {{ flash_messages(success=success, error=error) }}
 
     <a href="/library/browse" class="browse-back-link">← All public libraries</a>
 

@@ -1,6 +1,5 @@
 {% extends "base.html" %}
-{% from "macros.html" import flash_messages %}
-{% from "partials.html" import library_header %}
+{% from "partials.html" import library_header, flash_messages %}
 
 {% block title %}Browse Public Libraries — Book Library{% endblock %}
 
@@ -9,7 +8,7 @@
   {{ library_header(user, active_tab) }}
 
   <main class="library-main">
-    {{ flash_messages() }}
+    {{ flash_messages(success=success, error=error) }}
 
     <div class="browse-hero">
       <div>
@@ -30,10 +29,9 @@
       <div class="public-library-grid">
         {% for library in libraries %}
           <a href="/library/browse/{{ library.username }}" class="public-library-card">
-            <div class="public-library-card-top">
-              <span class="public-library-badge">Public</span>
-            </div>
+            <div class="public-library-card-top"></div>
             <div class="public-library-card-body">
+              <span class="public-library-badge">Public</span>
               <span class="public-library-avatar">{{ library.username[0]|upper }}</span>
               <div class="public-library-info">
                 <strong class="public-library-name">{{ library.username }}</strong>

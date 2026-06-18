@@ -67,6 +67,42 @@ body {
   color: var(--text-muted);
 }
 
+.password-rules {
+  list-style: none;
+  margin-top: 0.65rem;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.password-rules li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.15s ease;
+}
+
+.password-rule-icon {
+  width: 1rem;
+  flex-shrink: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+}
+
+.password-rules li.is-met {
+  color: #8ee8be;
+}
+
+.password-rules li.is-met .password-rule-icon {
+  color: var(--success);
+}
+
 input, textarea {
   width: 100%;
   padding: 0.65rem 0.85rem;

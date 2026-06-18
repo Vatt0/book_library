@@ -5,7 +5,6 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.config import settings
-from app.models import Book
 from app.schemas import GoogleBookResult
 
 
@@ -115,7 +114,7 @@ async def search_google_books(query: str, max_results: int = 20) -> list[GoogleB
 
 async def add_google_book_to_library(
     db: Session, *, user_id: int, google_books_id: str
-) -> Book:
+):
     from app.crud import book as book_crud
 
     existing = book_crud.get_book_by_google_id(db, user_id, google_books_id)

@@ -20,9 +20,7 @@ class User(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
-    books: Mapped[list["Book"]] = relationship(
-        "Book", back_populates="owner", cascade="all, delete-orphan"
-    )
+    books: Mapped[list["Book"]] = relationship("Book", cascade="all, delete-orphan")
 
 
 class Book(Base):
@@ -43,5 +41,3 @@ class Book(Base):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
-
-    owner: Mapped["User"] = relationship("User", back_populates="books")
