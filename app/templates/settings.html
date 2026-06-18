@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% from "macros.html" import flash_messages %}
+{% from "partials.html" import library_header %}
+
+{% block title %}Library Settings — Book Library{% endblock %}
+
+{% block content %}
+<div class="library-layout">
+  {{ library_header(user, active_tab) }}
+
+  <main class="library-main">
+    {{ flash_messages() }}
+
+    <div class="settings-hero">
+      <div class="settings-hero-text">
+        <p class="settings-eyebrow">Privacy</p>
+        <h2 class="library-page-title">Who can see your library?</h2>
+        <p class="settings-hero-lead">
+          Control whether your collection stays personal or can be discovered
+          by others on the Browse page and via the REST API.
+        </p>
+      </div>
+      <div class="settings-status-pill settings-status-pill--{{ user.library_visibility }}">
+        <span class="settings-status-dot"></span>
+        Currently {{ user.library_visibility }}
+      </div>
+    </div>
+
+    <form action="/library/settings" method="post" class="visibility-form">
+      <div class="visibility-form-inner">
+      <div class="visibility-grid">
+        <label class="visibility-card">
+          <input type="radio" name="library_visibility" value="private" class="visibility-radio"
+                 {% if user.library_visibility == 'private' %}checked{% endif %}>
+          <span class="visibility-card-check" aria-hidden="true">✓</span>
+          <span class="visibility-card-icon visibility-card-icon--private" aria-hidden="true">🔒</span>
+          <span class="visibility-card-content">
+            <span class="visibility-card-title">Private library</span>
+            <span class="visibility-card-desc">
+              Your books are visible only to you. Manage, edit, and delete without anyone else seeing your shelf.
+            </span>
+            <ul class="visibility-card-features">
+              <li>Full control over your collection</li>
+              <li>Hidden from Browse and public API</li>
+              <li>Recommended for personal use</li>
+            </ul>
+          </span>
+        </label>
+
+        <label class="visibility-card">
+          <input type="radio" name="library_visibility" value="public" class="visibility-radio"
+                 {% if user.library_visibility == 'public' %}checked{% endif %}>
+          <span class="visibility-card-check" aria-hidden="true">✓</span>
+          <span class="visibility-card-icon visibility-card-icon--public" aria-hidden="true">🌐</span>
+          <span class="visibility-card-content">
+            <span class="visibility-card-title">Public library</span>
+            <span class="visibility-card-desc">
+              Share your collection with anyone. Others can browse your books without logging in.
+            </span>
+            <ul class="visibility-card-features">
+              <li>Listed on the Browse page</li>
+              <li>Readable via REST API without auth</li>
+              <li>You still manage books when logged in</li>
+            </ul>
+            <div class="visibility-api-preview">
+              <span class="visibility-api-label">Public endpoint</span>
+              <code>/api/libraries/{{ user.username }}/books</code>
+            </div>
+          </span>
+        </label>
+      </div>
+
+      <div class="settings-actions">
+        <a href="/library" class="btn btn-secondary">Back to library</a>
+        <button type="submit" class="btn btn-primary">Save visibility</button>
+      </div>
+      </div>
+    </form>
+  </main>
+</div>
+{% endblock %}

@@ -19,6 +19,12 @@
     <a href="/library/search" class="library-tab {% if active_tab == 'search' %}active{% endif %}">
       <span class="library-tab-icon">🔍</span> Google Books
     </a>
+    <a href="/library/browse" class="library-tab {% if active_tab == 'browse' %}active{% endif %}">
+      <span class="library-tab-icon">🌐</span> Browse
+    </a>
+    <a href="/library/settings" class="library-tab {% if active_tab == 'settings' %}active{% endif %}">
+      <span class="library-tab-icon">⚙️</span> Settings
+    </a>
   </div>
 </div>
 {% endmacro %}
@@ -69,5 +75,26 @@
     <a href="/library/{{ book.id }}/delete" class="btn btn-danger btn-sm">Delete</a>
   </div>
   {% endif %}
+</article>
+{% endmacro %}
+
+{% macro public_book_card(book) %}
+<article class="book-card book-card--readonly">
+  <div class="book-cover">
+    {% if book.cover_url %}
+      <img src="{{ book.cover_url }}" alt="{{ book.title }}">
+    {% else %}
+      <div class="book-cover-fallback"><span>📖</span></div>
+    {% endif %}
+    {% if book.published_date %}
+      <span class="book-year-badge">{{ book.published_date[:4] if book.published_date|length >= 4 else book.published_date }}</span>
+    {% endif %}
+  </div>
+  <div class="book-body">
+    <h3 class="book-title">{{ book.title }}</h3>
+    <p class="book-author">{{ book.author or "Unknown author" }}</p>
+    {% if book.isbn %}<p class="book-isbn">ISBN {{ book.isbn }}</p>{% endif %}
+    {% if book.description %}<p class="book-desc">{{ book.description }}</p>{% endif %}
+  </div>
 </article>
 {% endmacro %}

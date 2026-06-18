@@ -189,6 +189,103 @@ def library_page(
     )
 
 
+@router.get("/library/settings")
+def library_settings_page(request: Request, db: Session = Depends(get_db)):
+    user, redirect = _login_required(request, db)
+    if redirect:
+        return redirect
+
+    return templates.TemplateResponse(
+        request,
+        "settings.html",
+        page_context(request, user=user, active_tab="settings"),
+    )
+
+
+@router.post("/library/settings")
+def library_settings_submit(
+    request: Request,
+    library_visibility: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    user, redirect = _login_required(request, db)
+    if redirect:
+        return redirect
+
+    if library_visibility not in ("private", "public"):
+        return templates.TemplateResponse(
+            request,
+            "settings.html",
+            page_context(
+                request,
+                user=user,
+                active_tab="settings",
+                error="Invalid visibility option",
+            ),
+        )
+
+    user_crud.update_library_visibility(
+        db, user=user, visibility=library_visibility
+    )
+    return RedirectResponse(
+        url="/library/settings?success=Library visibility updated",
+        status_code=303,
+    )
+
+
+@router.get("/library/browse")
+def browse_libraries_page(request: Request, db: Session = Depends(get_db)):
+    user, redirect = _login_required(request, db)
+    if redirect:
+        return redirect
+
+    libraries = user_crud.get_public_libraries(db)
+    return templates.TemplateResponse(
+        request,
+        "browse.html",
+        page_context(
+            request,
+            user=user,
+            libraries=libraries,
+            active_tab="browse",
+        ),
+    )
+
+
+@router.get("/library/browse/{username}")
+def browse_public_library_page(
+    request: Request,
+    username: str,
+    q: str = Query(default=""),
+    db: Session = Depends(get_db),
+):
+    user, redirect = _login_required(request, db)
+    if redirect:
+        return redirect
+
+    owner = user_crud.get_public_user_by_username(db, username)
+    if not owner:
+        return RedirectResponse(
+            url="/library/browse?error=Public library not found",
+            status_code=303,
+        )
+
+    search_query = q.strip()
+    books = book_crud.get_books(db, owner.id, query=search_query)
+    return templates.TemplateResponse(
+        request,
+        "public_library.html",
+        page_context(
+            request,
+            user=user,
+            owner=owner,
+            books=books,
+            query=search_query,
+            active_tab="browse",
+        ),
+    )
+
+
 @router.get("/library/search")
 async def library_search_page(
     request: Request,

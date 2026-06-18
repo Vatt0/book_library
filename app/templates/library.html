@@ -21,6 +21,10 @@
             {{ books|length }} book{% if books|length != 1 %}s{% endif %} in your library
           {% endif %}
         </p>
+        <a href="/library/settings" class="visibility-pill visibility-pill--{{ user.library_visibility }}">
+          <span class="visibility-pill-icon" aria-hidden="true">{% if user.library_visibility == 'public' %}🌐{% else %}🔒{% endif %}</span>
+          {{ user.library_visibility|capitalize }} library
+        </a>
       </div>
       <div class="library-toolbar-actions">
         <a href="/library/add" class="btn btn-primary library-add-btn">+ Add Book</a>

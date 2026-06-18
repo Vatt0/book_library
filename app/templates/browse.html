@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% from "macros.html" import flash_messages %}
+{% from "partials.html" import library_header %}
+
+{% block title %}Browse Public Libraries — Book Library{% endblock %}
+
+{% block content %}
+<div class="library-layout">
+  {{ library_header(user, active_tab) }}
+
+  <main class="library-main">
+    {{ flash_messages() }}
+
+    <div class="browse-hero">
+      <div>
+        <p class="settings-eyebrow">Community</p>
+        <h2 class="library-page-title">Public libraries</h2>
+        <p class="browse-hero-lead">
+          Discover collections shared by other readers. Each shelf is read-only —
+          only the owner can add or remove books.
+        </p>
+      </div>
+      <div class="browse-hero-stat">
+        <span class="browse-hero-stat-value">{{ libraries|length }}</span>
+        <span class="browse-hero-stat-label">public {% if libraries|length == 1 %}library{% else %}libraries{% endif %}</span>
+      </div>
+    </div>
+
+    {% if libraries %}
+      <div class="public-library-grid">
+        {% for library in libraries %}
+          <a href="/library/browse/{{ library.username }}" class="public-library-card">
+            <div class="public-library-card-top">
+              <span class="public-library-badge">Public</span>
+            </div>
+            <div class="public-library-card-body">
+              <span class="public-library-avatar">{{ library.username[0]|upper }}</span>
+              <div class="public-library-info">
+                <strong class="public-library-name">{{ library.username }}</strong>
+                <span class="public-library-meta">
+                  {{ library.book_count }} book{% if library.book_count != 1 %}s{% endif %} on shelf
+                </span>
+              </div>
+              <span class="public-library-arrow" aria-hidden="true">→</span>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="browse-empty">
+        <div class="browse-empty-icon">🌐</div>
+        <h3>No public libraries yet</h3>
+        <p>Be the first to share your collection — switch to public in Settings and your shelf will appear here.</p>
+        <a href="/library/settings" class="btn btn-primary">Open settings</a>
+      </div>
+    {% endif %}
+  </main>
+</div>
+{% endblock %}
