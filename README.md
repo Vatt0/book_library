@@ -28,7 +28,7 @@ A personal book library web app built with FastAPI. Create an account, manage yo
 1. **Clone the repository**
 
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/Vatt0/book_library
    cd book_library
    ```
 
