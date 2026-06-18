@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% from "macros.html" import flash_messages %}
+{% from "partials.html" import library_header, public_book_card %}
+
+{% block title %}{{ owner.username }}'s Library — Book Library{% endblock %}
+
+{% block content %}
+<div class="library-layout">
+  {{ library_header(user, active_tab) }}
+
+  <main class="library-main">
+    {{ flash_messages() }}
+
+    <a href="/library/browse" class="browse-back-link">← All public libraries</a>
+
+    <header class="public-shelf-hero">
+      <span class="public-shelf-avatar">{{ owner.username[0]|upper }}</span>
+      <div class="public-shelf-hero-text">
+        <span class="public-shelf-badge">Public library</span>
+        <h2 class="public-shelf-title">{{ owner.username }}'s collection</h2>
+        <p class="public-shelf-subtitle">
+          {% if query %}
+            {{ books|length }} result{% if books|length != 1 %}s{% endif %} for “{{ query }}”
+          {% else %}
+            {{ books|length }} book{% if books|length != 1 %}s{% endif %} shared publicly
+          {% endif %}
+        </p>
+      </div>
+    </header>
+
+    <form action="/library/browse/{{ owner.username }}" method="get" class="public-shelf-search">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.3-4.3"></path>
+      </svg>
+      <input type="text" name="q" placeholder="Search title, author, or ISBN…"
+             value="{{ query }}" class="library-search-input" {% if not query %}required minlength="1"{% endif %}>
+      <button class="btn btn-primary btn-sm" type="submit">Search</button>
+      {% if query %}
+        <a href="/library/browse/{{ owner.username }}" class="btn btn-secondary btn-sm">Clear</a>
+      {% endif %}
+    </form>
+
+    {% if query %}
+      <div class="library-search-active">
+        Showing results for <strong>“{{ query }}”</strong> in {{ owner.username }}'s library
+      </div>
+    {% endif %}
+
+    <div class="book-grid">
+      {% if books %}
+        {% for book in books %}
+          {{ public_book_card(book) }}
+        {% endfor %}
+      {% elif query %}
+        <div class="browse-empty browse-empty--inline">
+          <div class="browse-empty-icon">🔍</div>
+          <h3>No books found</h3>
+          <p>Nothing in this library matches “{{ query }}”.</p>
+        </div>
+      {% else %}
+        <div class="browse-empty browse-empty--inline">
+          <div class="browse-empty-icon">📚</div>
+          <h3>Empty shelf</h3>
+          <p>{{ owner.username }} hasn't added any books yet.</p>
+        </div>
+      {% endif %}
+    </div>
+  </main>
+</div>
+{% endblock %}

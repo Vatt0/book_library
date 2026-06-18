@@ -1,10 +1,19 @@
-from pydantic import BaseModel, EmailStr, Field
+from typing import Literal
+
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
+
+LibraryVisibility = Literal["private", "public"]
 
 
 class UserCreate(BaseModel):
     username: str = Field(min_length=3, max_length=50)
     email: EmailStr
     password: str = Field(min_length=6, max_length=100)
+
+
+class PublicLibrarySummary(BaseModel):
+    username: str
+    book_count: int
 
 
 class BookBase(BaseModel):
@@ -27,6 +36,12 @@ class BookUpdate(BaseModel):
     description: str | None = None
     published_date: str | None = Field(default=None, max_length=20)
     cover_url: str | None = Field(default=None, max_length=1000)
+
+
+class PublicBookResponse(BookBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
 
 
 class GoogleBookResult(BaseModel):
