@@ -13,7 +13,7 @@ from app.crud import book as book_crud
 from app.crud import user as user_crud
 from app.database import get_db
 from app.dependencies import get_user_from_request, page_context, require_user
-from app.schemas import BookCreate, BookUpdate, UserCreate
+from app.schemas import BookCreate, BookUpdate, UserCreate, format_validation_error
 from app.services.google_books import add_google_book_to_library, search_google_books
 
 router = APIRouter(tags=["pages"])
@@ -113,7 +113,9 @@ def register_page(request: Request, db: Session = Depends(get_db)):
     if get_user_from_request(request, db):
         return RedirectResponse(url="/library", status_code=303)
     return templates.TemplateResponse(
-        request, "register.html", page_context(request)
+        request,
+        "register.html",
+        page_context(request),
     )
 
 
@@ -128,7 +130,7 @@ def register_submit(
     try:
         user_data = UserCreate(username=username, email=email, password=password)
     except ValidationError as exc:
-        message = exc.errors()[0]["msg"]
+        message = format_validation_error(exc)
         return templates.TemplateResponse(
             request,
             "register.html",

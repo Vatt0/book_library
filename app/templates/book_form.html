@@ -1,6 +1,5 @@
 {% extends "base.html" %}
-{% from "macros.html" import flash_messages %}
-{% from "partials.html" import library_header %}
+{% from "partials.html" import library_header, flash_messages %}
 
 {% block title %}{% if book %}Edit Book{% else %}Add Book{% endif %} — Book Library{% endblock %}
 
@@ -9,7 +8,7 @@
   {{ library_header(user, "library") }}
 
   <main class="library-main library-main--narrow">
-    {{ flash_messages() }}
+    {{ flash_messages(success=success, error=error) }}
 
     <div class="card form-card">
       <h2>{% if book %}Edit Book{% else %}Add Book Manually{% endif %}</h2>
